@@ -1,24 +1,35 @@
-HELP.md
-.gradle
+# ==============================
+# Java
+# ==============================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# ==============================
+# Gradle
+# ==============================
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# ==============================
+# Spring Boot
+# ==============================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-### IntelliJ IDEA ###
-.idea
+# ==============================
+# IntelliJ IDEA
+# ==============================
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -26,12 +37,58 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# ==============================
+# 환경변수 / 시크릿 (절대 올리면 안됨)
+# ==============================
+.env
+.env.*
+!.env.example
+application-local.yml
+application-secret.yml
+application-prod.yml
 
-### VS Code ###
-.vscode/
+# ==============================
+# 로그
+# ==============================
+logs/
+*.log
+*.log.*
+log/
+
+# ==============================
+# Docker
+# ==============================
+docker-compose.override.yml
+
+# ==============================
+# OS
+# ==============================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ==============================
+# 테스트 / 커버리지
+# ==============================
+coverage/
+*.exec
+report/
+
+# ==============================
+# 기타
+# ==============================
+*.tmp
+*.bak
+*.swp
+*.orig

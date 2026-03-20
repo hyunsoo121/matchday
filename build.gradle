@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.4'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.diffplug.spotless' version '7.0.2'
 }
 
 group = 'com.heksis'
@@ -33,6 +34,26 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+spotless {
+	java {
+		googleJavaFormat('1.25.2')
+		removeUnusedImports()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.register('installGitHooks', Copy) {
+	description = 'Git pre-commit 훅을 .git/hooks에 설치합니다.'
+	from("${rootDir}/hooks") {
+		include 'pre-commit'
+	}
+	into "${rootDir}/.git/hooks"
+	filePermissions {
+		unix(0755)
+	}
 }
