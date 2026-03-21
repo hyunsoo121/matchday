@@ -4,7 +4,12 @@ import com.heksis.matchday.match.MatchTeam;
 import com.heksis.matchday.match.MatchTeamRole;
 
 public record MatchTeamResponse(
-    Long teamId, String nameKo, String nameEn, String logoUrl, MatchTeamRole role, Integer totalScore) {
+    Long teamId,
+    String nameKo,
+    String nameEn,
+    String logoUrl,
+    MatchTeamRole role,
+    Integer totalScore) {
 
   public static MatchTeamResponse from(MatchTeam matchTeam) {
     return new MatchTeamResponse(

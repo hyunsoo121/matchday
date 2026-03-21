@@ -24,19 +24,18 @@ public class MatchController {
       @RequestParam(required = false) Long sportId,
       @RequestParam(required = false) Long leagueId,
       @RequestParam(required = false) MatchStatus status,
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+          LocalDate date) {
     return ApiResponse.ok(matchService.findMatches(sportId, leagueId, status, date));
   }
 
   @GetMapping("/today")
-  public ApiResponse<List<MatchResponse>> getToday(
-      @RequestParam(required = false) Long sportId) {
+  public ApiResponse<List<MatchResponse>> getToday(@RequestParam(required = false) Long sportId) {
     return ApiResponse.ok(matchService.findToday(sportId));
   }
 
   @GetMapping("/live")
-  public ApiResponse<List<MatchResponse>> getLive(
-      @RequestParam(required = false) Long sportId) {
+  public ApiResponse<List<MatchResponse>> getLive(@RequestParam(required = false) Long sportId) {
     return ApiResponse.ok(matchService.findLive(sportId));
   }
 

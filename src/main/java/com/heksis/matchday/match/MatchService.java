@@ -17,7 +17,8 @@ public class MatchService {
 
   private final MatchRepository matchRepository;
 
-  public List<MatchResponse> findMatches(Long sportId, Long leagueId, MatchStatus status, LocalDate date) {
+  public List<MatchResponse> findMatches(
+      Long sportId, Long leagueId, MatchStatus status, LocalDate date) {
     LocalDateTime from = date != null ? date.atStartOfDay() : null;
     LocalDateTime to = date != null ? date.plusDays(1).atStartOfDay() : null;
     return matchRepository.findWithFilters(sportId, leagueId, status, from, to).stream()
