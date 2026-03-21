@@ -35,9 +35,17 @@ public class MatchTeam {
   private Team team;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "match_team_role")
+  @Column(nullable = false)
   private MatchTeamRole role;
 
   @Column(name = "total_score")
   private Integer totalScore;
+
+  public static MatchTeam create(Match match, Team team, MatchTeamRole role) {
+    MatchTeam matchTeam = new MatchTeam();
+    matchTeam.match = match;
+    matchTeam.team = team;
+    matchTeam.role = role;
+    return matchTeam;
+  }
 }

@@ -14,19 +14,65 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
       SELECT DISTINCT m FROM Match m
       LEFT JOIN FETCH m.teams mt
       LEFT JOIN FETCH mt.team
-      WHERE (:sportId IS NULL OR m.sport.id = :sportId)
-        AND (:leagueId IS NULL OR m.league.id = :leagueId)
-        AND (:status IS NULL OR m.status = :status)
-        AND (:from IS NULL OR m.matchTime >= :from)
-        AND (:to IS NULL OR m.matchTime < :to)
       ORDER BY m.matchTime
       """)
-  List<Match> findWithFilters(
+  List<Match> findAllWithTeams();
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.sport.id = :sportId
+      ORDER BY m.matchTime
+      """)
+  List<Match> findBySportIdWithTeams(@Param("sportId") Long sportId);
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.matchTime >= :from AND m.matchTime < :to
+      ORDER BY m.matchTime
+      """)
+  List<Match> findByDateRangeWithTeams(
+      @Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.sport.id = :sportId
+        AND m.matchTime >= :from AND m.matchTime < :to
+      ORDER BY m.matchTime
+      """)
+  List<Match> findBySportIdAndDateRangeWithTeams(
       @Param("sportId") Long sportId,
-      @Param("leagueId") Long leagueId,
-      @Param("status") MatchStatus status,
       @Param("from") LocalDateTime from,
       @Param("to") LocalDateTime to);
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.status = :status
+      ORDER BY m.matchTime
+      """)
+  List<Match> findByStatusWithTeams(@Param("status") MatchStatus status);
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.sport.id = :sportId AND m.status = :status
+      ORDER BY m.matchTime
+      """)
+  List<Match> findBySportIdAndStatusWithTeams(
+      @Param("sportId") Long sportId, @Param("status") MatchStatus status);
 
   @Query(
       """
@@ -36,4 +82,6 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
       WHERE m.id = :id
       """)
   Optional<Match> findByIdWithTeams(@Param("id") Long id);
+
+  Optional<Match> findByExternalId(String externalId);
 }

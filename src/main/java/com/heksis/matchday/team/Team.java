@@ -51,4 +51,21 @@ public class Team {
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;
+
+  public static Team create(
+      Sport sport, League league, String nameEn, String shortName, String externalId) {
+    Team team = new Team();
+    team.sport = sport;
+    team.league = league;
+    team.nameKo = nameEn;
+    team.nameEn = nameEn;
+    team.shortName = shortName;
+    team.externalId = externalId;
+    team.createdAt = LocalDateTime.now();
+    return team;
+  }
+
+  public void updateLogoUrl(String logoUrl) {
+    this.logoUrl = logoUrl;
+  }
 }

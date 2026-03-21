@@ -45,7 +45,7 @@ public class Match {
   private LocalDateTime matchTime;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, columnDefinition = "match_status")
+  @Column(nullable = false)
   private MatchStatus status;
 
   @JdbcTypeCode(SqlTypes.JSON)
@@ -66,4 +66,28 @@ public class Match {
 
   @OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
   private List<MatchTeam> teams = new ArrayList<>();
+
+  public static Match create(
+      Sport sport,
+      League league,
+      LocalDateTime matchTime,
+      MatchStatus status,
+      String externalId,
+      String externalUrl) {
+    Match match = new Match();
+    match.sport = sport;
+    match.league = league;
+    match.matchTime = matchTime;
+    match.status = status;
+    match.externalId = externalId;
+    match.externalUrl = externalUrl;
+    match.createdAt = LocalDateTime.now();
+    match.updatedAt = LocalDateTime.now();
+    return match;
+  }
+
+  public void updateStatus(MatchStatus status) {
+    this.status = status;
+    this.updatedAt = LocalDateTime.now();
+  }
 }
