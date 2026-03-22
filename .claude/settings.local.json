@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./gradlew compileJava)",
+      "Bash(curl -s \"http://localhost:8080/api/v1/teams/search?q=Red Bull\")",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s \"http://localhost:8080/api/v1/matches?sportId=6\")",
+      "Bash(curl -s \"https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20260321\")",
+      "Bash(python3 -c \":*)",
+      "Bash(curl -s \"http://localhost:8080/api/v1/matches/today\")"
+    ]
+  }
+}
