@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class KboCrawler {
 
-  private static final String SCHEDULE_URL =
-      "https://www.koreabaseball.com/Schedule/Schedule.aspx";
+  private static final String SCHEDULE_URL = "https://www.koreabaseball.com/Schedule/Schedule.aspx";
 
   // 정규시즌 + 포스트시즌
   private static final String SERIES_ID = "0,9,6";
@@ -25,9 +24,7 @@ public class KboCrawler {
 
     try (Playwright playwright = Playwright.create()) {
       try (Browser browser =
-          playwright
-              .chromium()
-              .launch(new BrowserType.LaunchOptions().setHeadless(true))) {
+          playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true))) {
 
         Page page = browser.newPage();
         page.navigate(SCHEDULE_URL);
