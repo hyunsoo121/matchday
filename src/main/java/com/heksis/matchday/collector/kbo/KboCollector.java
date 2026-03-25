@@ -63,13 +63,20 @@ public class KboCollector {
         if (matchTime == null) continue;
 
         // from~to 범위 밖이면 스킵
-        LocalDate matchDate = matchTime.atZone(ZoneOffset.UTC).withZoneSameInstant(KST).toLocalDate();
+        LocalDate matchDate =
+            matchTime.atZone(ZoneOffset.UTC).withZoneSameInstant(KST).toLocalDate();
         if (matchDate.isBefore(from) || matchDate.isAfter(to)) continue;
 
         try {
-          transactionTemplate.executeWithoutResult(status -> syncGame(sport, league, game, matchTime));
+          transactionTemplate.executeWithoutResult(
+              status -> syncGame(sport, league, game, matchTime));
         } catch (Exception e) {
-          log.error("KBO 경기 동기화 실패: {}-{} {}, error={}", game.date(), game.awayTeam(), game.homeTeam(), e.getMessage());
+          log.error(
+              "KBO 경기 동기화 실패: {}-{} {}, error={}",
+              game.date(),
+              game.awayTeam(),
+              game.homeTeam(),
+              e.getMessage());
         }
       }
     }
@@ -84,27 +91,42 @@ public class KboCollector {
     Match match =
         matchRepository
             .findByExternalId(externalId)
-            .map(existing -> { existing.updateStatus(status); return existing; })
-            .orElseGet(() -> matchRepository.save(
-                Match.create(sport, league, matchTime, status, externalId, null)));
+            .map(
+                existing -> {
+                  existing.updateStatus(status);
+                  return existing;
+                })
+            .orElseGet(
+                () ->
+                    matchRepository.save(
+                        Match.create(sport, league, matchTime, status, externalId, null)));
 
     Team awayTeam = findOrCreateTeam(sport, league, game.awayTeam());
     Team homeTeam = findOrCreateTeam(sport, league, game.homeTeam());
     boolean isFinished = status == MatchStatus.FINISHED;
 
-    syncMatchTeam(match, awayTeam, MatchTeamRole.AWAY, game.awayScore(), game.homeScore(), isFinished);
-    syncMatchTeam(match, homeTeam, MatchTeamRole.HOME, game.homeScore(), game.awayScore(), isFinished);
+    syncMatchTeam(
+        match, awayTeam, MatchTeamRole.AWAY, game.awayScore(), game.homeScore(), isFinished);
+    syncMatchTeam(
+        match, homeTeam, MatchTeamRole.HOME, game.homeScore(), game.awayScore(), isFinished);
   }
 
   private void syncMatchTeam(
-      Match match, Team team, MatchTeamRole role,
-      Integer myScore, Integer opponentScore, boolean isFinished) {
+      Match match,
+      Team team,
+      MatchTeamRole role,
+      Integer myScore,
+      Integer opponentScore,
+      boolean isFinished) {
     MatchTeamResult result = calcResult(isFinished, myScore, opponentScore);
 
     matchTeamRepository
         .findByMatchIdAndTeamId(match.getId(), team.getId())
         .ifPresentOrElse(
-            existing -> { existing.updateScore(myScore); existing.updateResult(result); },
+            existing -> {
+              existing.updateScore(myScore);
+              existing.updateResult(result);
+            },
             () -> {
               MatchTeam mt = MatchTeam.create(match, team, role);
               mt.updateScore(myScore);
@@ -117,8 +139,8 @@ public class KboCollector {
     String externalId = "kbo_" + teamName;
     return teamRepository
         .findByExternalId(externalId)
-        .orElseGet(() -> teamRepository.save(
-            Team.create(sport, league, teamName, teamName, externalId)));
+        .orElseGet(
+            () -> teamRepository.save(Team.create(sport, league, teamName, teamName, externalId)));
   }
 
   private MatchTeamResult calcResult(boolean isFinished, Integer myScore, Integer opponentScore) {
@@ -136,10 +158,19 @@ public class KboCollector {
 
   // externalId: "kbo_{year}_{mmdd}_{awayTeam}_{homeTeam}"
   private String buildExternalId(KboGameData game, LocalDateTime matchTime) {
-    String mmdd = String.format("%02d%02d", matchTime.atZone(ZoneOffset.UTC)
-        .withZoneSameInstant(KST).getMonthValue(),
-        matchTime.atZone(ZoneOffset.UTC).withZoneSameInstant(KST).getDayOfMonth());
-    return "kbo_" + matchTime.getYear() + "_" + mmdd + "_" + game.awayTeam() + "_" + game.homeTeam();
+    String mmdd =
+        String.format(
+            "%02d%02d",
+            matchTime.atZone(ZoneOffset.UTC).withZoneSameInstant(KST).getMonthValue(),
+            matchTime.atZone(ZoneOffset.UTC).withZoneSameInstant(KST).getDayOfMonth());
+    return "kbo_"
+        + matchTime.getYear()
+        + "_"
+        + mmdd
+        + "_"
+        + game.awayTeam()
+        + "_"
+        + game.homeTeam();
   }
 
   private LocalDateTime parseToUtc(String dateStr, String timeStr, int year) {
@@ -148,7 +179,8 @@ public class KboCollector {
       String mmdd = dateStr.replaceAll("\\(.*?\\)", "").trim();
       LocalDate date = MonthDay.parse(mmdd, DATE_FORMAT).atYear(year);
       String[] timeParts = (timeStr != null && !timeStr.isBlank() ? timeStr : "00:00").split(":");
-      ZonedDateTime kst = date.atTime(Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1])).atZone(KST);
+      ZonedDateTime kst =
+          date.atTime(Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1])).atZone(KST);
       return kst.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
     } catch (Exception e) {
       log.warn("KBO 날짜 파싱 실패: date={}, time={}", dateStr, timeStr);

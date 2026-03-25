@@ -8,10 +8,7 @@ import lombok.Builder;
 /**
  * KBO 크롤링으로 추출한 경기 데이터.
  *
- * <p>play 텍스트 예시:
- * - 종료: "두산\n5\n:\n3\nLG"
- * - 예정: "두산\n-\n:\n-\nLG"
- * - 취소: "두산\nLG" (비고에 취소 사유)
+ * <p>play 텍스트 예시: - 종료: "두산\n5\n:\n3\nLG" - 예정: "두산\n-\n:\n-\nLG" - 취소: "두산\nLG" (비고에 취소 사유)
  */
 @Builder
 public record KboGameData(
@@ -39,8 +36,7 @@ public record KboGameData(
     String stadium = (String) row.getOrDefault("stadium", "");
     String remark = (String) row.getOrDefault("remark", "");
 
-    boolean cancelled =
-        remark.contains("취소") || remark.contains("우천") || remark.contains("콜드");
+    boolean cancelled = remark.contains("취소") || remark.contains("우천") || remark.contains("콜드");
 
     // 점수 있는 경우 파싱
     Matcher scoreMatcher = SCORE_PATTERN.matcher(play);

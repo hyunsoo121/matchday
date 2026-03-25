@@ -23,5 +23,22 @@ spring:
       port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD:matchday}
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: profile, email
+
 riot:
   api-key: ${RIOT_ESPORTS_API_KEY:0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z}
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiry: 3600000      # 1시간
+  refresh-token-expiry: 2592000000  # 30일
+
+app:
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}

@@ -136,6 +136,8 @@ docker-compose up -d
 
 ## 진행 상황
 
+### MVP
+
 - [x] 기획, 기술스택, DB 스키마, API 명세
 - [x] 개발 환경 설정 (Spotless, pre-commit, Docker Compose, Flyway)
 - [x] 도메인 레이어 (Sport, League, Team, Match, User)
@@ -145,8 +147,24 @@ docker-compose up -d
 - [x] F1 Collector
 - [x] Riot Collector (LoL, 발로란트)
 - [x] K리그 Collector (K리그 1, 2)
+- [x] KBO Collector (Playwright 헤드리스 크롤링)
 - [x] 타임존 처리 (UTC 저장, KST 기준 날짜 조회)
 - [ ] Auth (OAuth — 카카오, 구글) + JWT
 - [ ] User / Favorite Service & Controller
 - [ ] Frontend (React + Vite)
-- [ ] KBO Collector (크롤링)
+- [ ] 배포 (AWS EC2 + RDS + ElastiCache)
+
+### MVP 이후
+
+- [ ] 실시간 경기 세부 정보 (이닝, 경기 시간, 세트 등)
+  - KBO: 라이브 게임 페이지 크롤링 (이닝/점수판)
+  - 축구: ESPN API 라이브 경기 시간 연동
+  - LoL/Valorant: Riot API 세트별 결과 연동
+- [ ] 팀/선수 로고 이미지 (S3 저장)
+  - ESPN 제공 이미지 URL 수집 및 캐싱
+  - K리그/KBO 로고 별도 수집
+- [ ] KBL / WKBL Collector
+- [ ] 알림 기능 (즐겨찾기 팀 경기 시작/종료 푸시)
+- [ ] 경기 상세 페이지 (라인업, 하이라이트 링크)
+- [ ] 검색 기능 (팀명, 선수명)
+- [ ] 관리자 대시보드 (sync 모니터링, 수동 실행 UI)
