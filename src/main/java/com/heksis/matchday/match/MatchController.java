@@ -43,7 +43,8 @@ public class MatchController {
   @GetMapping("/favorites")
   public ApiResponse<List<MatchResponse>> getFavorites(
       @AuthenticationPrincipal Long userId,
-      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+          LocalDate date) {
     return ApiResponse.ok(matchService.findByFavorites(userId, date));
   }
 

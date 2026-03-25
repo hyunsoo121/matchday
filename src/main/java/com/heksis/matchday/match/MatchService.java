@@ -51,15 +51,21 @@ public class MatchService {
 
   public List<MatchResponse> findByFavorites(Long userId, LocalDate date) {
     List<UserFavorite> favorites = favoriteRepository.findAllByUserId(userId);
-    List<Long> sportIds = favorites.stream()
-        .filter(f -> f.getTargetType() == FavoriteTargetType.SPORT)
-        .map(UserFavorite::getTargetId).toList();
-    List<Long> leagueIds = favorites.stream()
-        .filter(f -> f.getTargetType() == FavoriteTargetType.LEAGUE)
-        .map(UserFavorite::getTargetId).toList();
-    List<Long> teamIds = favorites.stream()
-        .filter(f -> f.getTargetType() == FavoriteTargetType.TEAM)
-        .map(UserFavorite::getTargetId).toList();
+    List<Long> sportIds =
+        favorites.stream()
+            .filter(f -> f.getTargetType() == FavoriteTargetType.SPORT)
+            .map(UserFavorite::getTargetId)
+            .toList();
+    List<Long> leagueIds =
+        favorites.stream()
+            .filter(f -> f.getTargetType() == FavoriteTargetType.LEAGUE)
+            .map(UserFavorite::getTargetId)
+            .toList();
+    List<Long> teamIds =
+        favorites.stream()
+            .filter(f -> f.getTargetType() == FavoriteTargetType.TEAM)
+            .map(UserFavorite::getTargetId)
+            .toList();
 
     if (sportIds.isEmpty() && leagueIds.isEmpty() && teamIds.isEmpty()) return List.of();
 
@@ -67,7 +73,9 @@ public class MatchService {
     LocalDateTime[] range = toUtcRange(kstDate);
     return matchRepository
         .findByDateRangeAndFavoritesWithTeams(range[0], range[1], sportIds, leagueIds, teamIds)
-        .stream().map(MatchResponse::from).toList();
+        .stream()
+        .map(MatchResponse::from)
+        .toList();
   }
 
   private static final ZoneId KST = ZoneId.of("Asia/Seoul");

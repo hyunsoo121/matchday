@@ -11,7 +11,7 @@
 | 분류 | 기술 |
 |------|------|
 | Backend | Java 21, Spring Boot 3.4.x, Gradle (Groovy DSL) |
-| Frontend | React 18, Vite |
+| Frontend | Next.js (TypeScript, Tailwind CSS) |
 | Database | PostgreSQL, Redis |
 | Infra | AWS (EC2, RDS, ElastiCache, S3, CloudWatch) |
 | CI/CD | GitHub Actions → ECR → EC2 |
@@ -98,14 +98,22 @@ docker-compose up -d
 | GET | `/api/v1/teams/search` | 팀 검색 |
 | GET | `/api/v1/teams/{id}` | 팀 단건 조회 |
 
-### 인증 API (예정)
+### 인증 API
 
 | Method | URL | 설명 |
 |--------|-----|------|
-| POST | `/api/v1/auth/oauth/{provider}` | OAuth 로그인 (kakao, google) |
+| GET | `/oauth2/authorization/google` | Google OAuth 로그인 시작 |
 | POST | `/api/v1/auth/refresh` | 토큰 갱신 |
+
+> 로그인 성공 시 `{FRONTEND_URL}/oauth2/callback?accessToken=...&refreshToken=...` 으로 리다이렉트
+
+### 즐겨찾기 API (로그인 필요)
+
+| Method | URL | 설명 |
+|--------|-----|------|
+| GET | `/api/v1/matches/favorites` | 즐겨찾기 기반 경기 목록 (`date` 파라미터, 기본값: 오늘) |
 | GET | `/api/v1/favorites` | 즐겨찾기 목록 |
-| POST | `/api/v1/favorites` | 즐겨찾기 추가 |
+| POST | `/api/v1/favorites` | 즐겨찾기 추가 (`targetType`: SPORT/LEAGUE/TEAM, `targetId`) |
 | DELETE | `/api/v1/favorites/{id}` | 즐겨찾기 삭제 |
 
 ### Admin API (수동 sync)
@@ -115,6 +123,7 @@ docker-compose up -d
 | POST | `/api/v1/admin/collector/espn/sync` | ESPN 수동 sync |
 | POST | `/api/v1/admin/collector/mlb/sync` | MLB 수동 sync |
 | POST | `/api/v1/admin/collector/f1/sync` | F1 수동 sync |
+| POST | `/api/v1/admin/collector/kbo/sync` | KBO 수동 sync |
 | POST | `/api/v1/admin/collector/riot/sync` | Riot 수동 sync |
 | POST | `/api/v1/admin/collector/kleague/sync` | K리그 수동 sync |
 
@@ -149,9 +158,10 @@ docker-compose up -d
 - [x] K리그 Collector (K리그 1, 2)
 - [x] KBO Collector (Playwright 헤드리스 크롤링)
 - [x] 타임존 처리 (UTC 저장, KST 기준 날짜 조회)
-- [ ] Auth (OAuth — 카카오, 구글) + JWT
-- [ ] User / Favorite Service & Controller
-- [ ] Frontend (React + Vite)
+- [x] Auth (Google OAuth2 + JWT)
+- [x] User / Favorite Service & Controller
+- [x] 즐겨찾기 기반 경기 필터 (`GET /api/v1/matches/favorites`)
+- [ ] Frontend (Next.js)
 - [ ] 배포 (AWS EC2 + RDS + ElastiCache)
 
 ### MVP 이후

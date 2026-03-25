@@ -33,8 +33,7 @@ public class FavoriteController {
   }
 
   @DeleteMapping("/{id}")
-  public ApiResponse<Void> remove(
-      @AuthenticationPrincipal Long userId, @PathVariable Long id) {
+  public ApiResponse<Void> remove(@AuthenticationPrincipal Long userId, @PathVariable Long id) {
     favoriteService.remove(userId, id);
     return ApiResponse.ok(null);
   }

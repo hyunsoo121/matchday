@@ -18,9 +18,7 @@ public class FavoriteService {
 
   @Transactional(readOnly = true)
   public List<FavoriteResponse> findAll(Long userId) {
-    return favoriteRepository.findAllByUserId(userId).stream()
-        .map(FavoriteResponse::from)
-        .toList();
+    return favoriteRepository.findAllByUserId(userId).stream().map(FavoriteResponse::from).toList();
   }
 
   @Transactional
