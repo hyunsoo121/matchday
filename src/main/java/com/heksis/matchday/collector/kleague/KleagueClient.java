@@ -36,8 +36,20 @@ public class KleagueClient {
         .uri(BASE_URL + "/getScheduleList.do")
         .header("Content-Type", "application/json")
         .header("Referer", BASE_URL)
-        .body(Map.of("leagueId", leagueId, "year", year, "month", month,
-            "teamId", "", "ticketYn", "N", "etcYn", "N"))
+        .body(
+            Map.of(
+                "leagueId",
+                leagueId,
+                "year",
+                year,
+                "month",
+                month,
+                "teamId",
+                "",
+                "ticketYn",
+                "N",
+                "etcYn",
+                "N"))
         .retrieve()
         .body(KleagueScheduleResponse.class);
   }

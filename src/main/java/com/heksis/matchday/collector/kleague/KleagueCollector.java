@@ -39,9 +39,7 @@ public class KleagueCollector {
   record LeagueConfig(int kleagueId, String leagueCode) {}
 
   private static final List<LeagueConfig> LEAGUE_CONFIGS =
-      List.of(
-          new LeagueConfig(1, "kleague1"),
-          new LeagueConfig(2, "kleague2"));
+      List.of(new LeagueConfig(1, "kleague1"), new LeagueConfig(2, "kleague2"));
 
   private final KleagueClient kleagueClient;
   private final SportRepository sportRepository;
@@ -118,9 +116,8 @@ public class KleagueCollector {
         continue;
       }
 
-      if (response == null
-          || response.data() == null
-          || response.data().scheduleList() == null) continue;
+      if (response == null || response.data() == null || response.data().scheduleList() == null)
+        continue;
 
       for (KleagueScheduleResponse.Game game : response.data().scheduleList()) {
         try {
@@ -155,12 +152,19 @@ public class KleagueCollector {
 
     boolean isFinished = status == MatchStatus.FINISHED;
 
-    syncMatchTeam(match, homeTeam, MatchTeamRole.HOME, game.homeGoal(), game.awayGoal(), isFinished);
-    syncMatchTeam(match, awayTeam, MatchTeamRole.AWAY, game.awayGoal(), game.homeGoal(), isFinished);
+    syncMatchTeam(
+        match, homeTeam, MatchTeamRole.HOME, game.homeGoal(), game.awayGoal(), isFinished);
+    syncMatchTeam(
+        match, awayTeam, MatchTeamRole.AWAY, game.awayGoal(), game.homeGoal(), isFinished);
   }
 
   private void syncMatchTeam(
-      Match match, Team team, MatchTeamRole role, Integer myGoal, Integer opponentGoal, boolean isFinished) {
+      Match match,
+      Team team,
+      MatchTeamRole role,
+      Integer myGoal,
+      Integer opponentGoal,
+      boolean isFinished) {
     MatchTeamResult result = calcResult(isFinished, myGoal, opponentGoal);
 
     matchTeamRepository
@@ -183,9 +187,7 @@ public class KleagueCollector {
     return teamRepository
         .findByExternalId(externalId)
         .orElseGet(
-            () ->
-                teamRepository.save(
-                    Team.create(sport, league, teamName, teamName, externalId)));
+            () -> teamRepository.save(Team.create(sport, league, teamName, teamName, externalId)));
   }
 
   private MatchTeamResult calcResult(boolean isFinished, Integer myGoal, Integer opponentGoal) {
@@ -209,8 +211,7 @@ public class KleagueCollector {
       String[] timeParts = (gameTime != null ? gameTime : "00:00").split(":");
       LocalDate date = LocalDate.parse(gameDate, DATE_FORMAT);
       ZonedDateTime kst =
-          date.atTime(Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1]))
-              .atZone(KST);
+          date.atTime(Integer.parseInt(timeParts[0]), Integer.parseInt(timeParts[1])).atZone(KST);
       return kst.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
     } catch (Exception e) {
       return LocalDateTime.now(ZoneOffset.UTC);
