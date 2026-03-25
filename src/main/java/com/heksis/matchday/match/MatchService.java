@@ -4,6 +4,10 @@ import com.heksis.matchday.global.exception.BusinessException;
 import com.heksis.matchday.global.exception.ErrorCode;
 import com.heksis.matchday.match.dto.MatchResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +28,11 @@ public class MatchService {
     } else if (status != null) {
       matches = matchRepository.findByStatusWithTeams(status);
     } else if (date != null && sportId != null) {
-      matches =
-          matchRepository.findBySportIdAndDateRangeWithTeams(
-              sportId, date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+      LocalDateTime[] range = toUtcRange(date);
+      matches = matchRepository.findBySportIdAndDateRangeWithTeams(sportId, range[0], range[1]);
     } else if (date != null) {
-      matches =
-          matchRepository.findByDateRangeWithTeams(
-              date.atStartOfDay(), date.plusDays(1).atStartOfDay());
+      LocalDateTime[] range = toUtcRange(date);
+      matches = matchRepository.findByDateRangeWithTeams(range[0], range[1]);
     } else if (sportId != null) {
       matches = matchRepository.findBySportIdWithTeams(sportId);
     } else {
@@ -40,7 +42,18 @@ public class MatchService {
   }
 
   public List<MatchResponse> findToday(Long sportId) {
-    return findMatches(sportId, null, null, LocalDate.now());
+    return findMatches(sportId, null, null, LocalDate.now(ZoneId.of("Asia/Seoul")));
+  }
+
+  private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+
+  // KST 날짜 → UTC LocalDateTime 범위 변환
+  private LocalDateTime[] toUtcRange(LocalDate kstDate) {
+    ZonedDateTime startKst = kstDate.atStartOfDay(KST);
+    LocalDateTime startUtc = startKst.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+    LocalDateTime endUtc =
+        startKst.plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+    return new LocalDateTime[] {startUtc, endUtc};
   }
 
   public List<MatchResponse> findLive(Long sportId) {

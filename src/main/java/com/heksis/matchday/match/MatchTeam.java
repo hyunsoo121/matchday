@@ -41,11 +41,23 @@ public class MatchTeam {
   @Column(name = "total_score")
   private Integer totalScore;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "result")
+  private MatchTeamResult result;
+
   public static MatchTeam create(Match match, Team team, MatchTeamRole role) {
     MatchTeam matchTeam = new MatchTeam();
     matchTeam.match = match;
     matchTeam.team = team;
     matchTeam.role = role;
     return matchTeam;
+  }
+
+  public void updateScore(Integer score) {
+    this.totalScore = score;
+  }
+
+  public void updateResult(MatchTeamResult result) {
+    this.result = result;
   }
 }

@@ -1,6 +1,7 @@
 package com.heksis.matchday.match.dto;
 
 import com.heksis.matchday.match.MatchTeam;
+import com.heksis.matchday.match.MatchTeamResult;
 import com.heksis.matchday.match.MatchTeamRole;
 
 public record MatchTeamResponse(
@@ -9,7 +10,8 @@ public record MatchTeamResponse(
     String nameEn,
     String logoUrl,
     MatchTeamRole role,
-    Integer totalScore) {
+    Integer totalScore,
+    MatchTeamResult result) {
 
   public static MatchTeamResponse from(MatchTeam matchTeam) {
     return new MatchTeamResponse(
@@ -18,6 +20,7 @@ public record MatchTeamResponse(
         matchTeam.getTeam().getNameEn(),
         matchTeam.getTeam().getLogoUrl(),
         matchTeam.getRole(),
-        matchTeam.getTotalScore());
+        matchTeam.getTotalScore(),
+        matchTeam.getResult());
   }
 }
