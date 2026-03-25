@@ -84,4 +84,24 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
   Optional<Match> findByIdWithTeams(@Param("id") Long id);
 
   Optional<Match> findByExternalId(String externalId);
+
+  @Query(
+      """
+      SELECT DISTINCT m FROM Match m
+      LEFT JOIN FETCH m.teams mt
+      LEFT JOIN FETCH mt.team
+      WHERE m.matchTime >= :from AND m.matchTime < :to
+        AND (
+          m.sport.id IN :sportIds
+          OR m.league.id IN :leagueIds
+          OR mt.team.id IN :teamIds
+        )
+      ORDER BY m.matchTime
+      """)
+  List<Match> findByDateRangeAndFavoritesWithTeams(
+      @Param("from") LocalDateTime from,
+      @Param("to") LocalDateTime to,
+      @Param("sportIds") List<Long> sportIds,
+      @Param("leagueIds") List<Long> leagueIds,
+      @Param("teamIds") List<Long> teamIds);
 }

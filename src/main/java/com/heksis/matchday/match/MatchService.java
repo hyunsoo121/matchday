@@ -3,6 +3,9 @@ package com.heksis.matchday.match;
 import com.heksis.matchday.global.exception.BusinessException;
 import com.heksis.matchday.global.exception.ErrorCode;
 import com.heksis.matchday.match.dto.MatchResponse;
+import com.heksis.matchday.user.FavoriteTargetType;
+import com.heksis.matchday.user.UserFavorite;
+import com.heksis.matchday.user.UserFavoriteRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchService {
 
   private final MatchRepository matchRepository;
+  private final UserFavoriteRepository favoriteRepository;
 
   public List<MatchResponse> findMatches(
       Long sportId, Long leagueId, MatchStatus status, LocalDate date) {
@@ -43,6 +47,27 @@ public class MatchService {
 
   public List<MatchResponse> findToday(Long sportId) {
     return findMatches(sportId, null, null, LocalDate.now(ZoneId.of("Asia/Seoul")));
+  }
+
+  public List<MatchResponse> findByFavorites(Long userId, LocalDate date) {
+    List<UserFavorite> favorites = favoriteRepository.findAllByUserId(userId);
+    List<Long> sportIds = favorites.stream()
+        .filter(f -> f.getTargetType() == FavoriteTargetType.SPORT)
+        .map(UserFavorite::getTargetId).toList();
+    List<Long> leagueIds = favorites.stream()
+        .filter(f -> f.getTargetType() == FavoriteTargetType.LEAGUE)
+        .map(UserFavorite::getTargetId).toList();
+    List<Long> teamIds = favorites.stream()
+        .filter(f -> f.getTargetType() == FavoriteTargetType.TEAM)
+        .map(UserFavorite::getTargetId).toList();
+
+    if (sportIds.isEmpty() && leagueIds.isEmpty() && teamIds.isEmpty()) return List.of();
+
+    LocalDate kstDate = date != null ? date : LocalDate.now(KST);
+    LocalDateTime[] range = toUtcRange(kstDate);
+    return matchRepository
+        .findByDateRangeAndFavoritesWithTeams(range[0], range[1], sportIds, leagueIds, teamIds)
+        .stream().map(MatchResponse::from).toList();
   }
 
   private static final ZoneId KST = ZoneId.of("Asia/Seoul");

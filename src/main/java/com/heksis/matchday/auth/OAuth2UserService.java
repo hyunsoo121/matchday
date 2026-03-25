@@ -37,9 +37,7 @@ public class OAuth2UserService
         userRepository
             .findByOauthProviderAndOauthId(OAuthProvider.GOOGLE, oauthId)
             .orElseGet(
-                () ->
-                    userRepository.save(
-                        User.create(OAuthProvider.GOOGLE, oauthId, name, email)));
+                () -> userRepository.save(User.create(OAuthProvider.GOOGLE, oauthId, name, email)));
 
     return new DefaultOAuth2User(
         Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),

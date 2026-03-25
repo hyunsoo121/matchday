@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,13 @@ public class MatchController {
   @GetMapping("/live")
   public ApiResponse<List<MatchResponse>> getLive(@RequestParam(required = false) Long sportId) {
     return ApiResponse.ok(matchService.findLive(sportId));
+  }
+
+  @GetMapping("/favorites")
+  public ApiResponse<List<MatchResponse>> getFavorites(
+      @AuthenticationPrincipal Long userId,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    return ApiResponse.ok(matchService.findByFavorites(userId, date));
   }
 
   @GetMapping("/{id}")
