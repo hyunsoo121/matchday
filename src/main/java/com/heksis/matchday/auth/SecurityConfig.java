@@ -22,14 +22,15 @@ public class SecurityConfig {
       OAuth2SuccessHandler successHandler)
       throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
-        .sessionManagement(
-            s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers("/api/v1/auth/**", "/oauth2/**", "/login/**")
                     .permitAll()
                     .requestMatchers("/api/v1/admin/**")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/matches/favorites")
+                    .authenticated()
                     .requestMatchers(HttpMethod.GET, "/api/v1/**")
                     .permitAll()
                     .anyRequest()
