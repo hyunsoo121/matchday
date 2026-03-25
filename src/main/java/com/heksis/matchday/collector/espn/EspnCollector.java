@@ -40,8 +40,6 @@ public class EspnCollector {
           new LeagueConfig("soccer", "ger.1", "football", "bundesliga"),
           new LeagueConfig("soccer", "fra.1", "football", "ligue1"),
           new LeagueConfig("soccer", "uefa.champions", "football", "ucl"),
-          new LeagueConfig("soccer", "kor.1", "football", "kleague1"),
-          new LeagueConfig("soccer", "kor.2", "football", "kleague2"),
           new LeagueConfig("basketball", "nba", "basketball", "nba"));
 
   private final EspnClient espnClient;

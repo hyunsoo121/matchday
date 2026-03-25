@@ -8,7 +8,29 @@
       "Bash(curl -s \"https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20260321\")",
       "Bash(python3 -c \":*)",
       "Bash(curl -s \"http://localhost:8080/api/v1/matches/today\")",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(curl -s --compressed \"https://site.api.espn.com/apis/site/v2/sports/soccer/kor.1/scoreboard\")",
+      "Bash(curl -s --compressed \"https://site.api.espn.com/apis/site/v2/sports/soccer/kor.1/teams\")",
+      "WebFetch(domain:www.kleague.com)",
+      "WebFetch(domain:api-gw.sports.naver.com)",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/x-www-form-urlencoded\" -H \"Referer: https://www.kleague.com\" -d \"leagueId=1&year=2026&month=3\")",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getClubListByYear.do\" -H \"Content-Type: application/x-www-form-urlencoded\" -H \"Referer: https://www.kleague.com\" -d \"leagueId=1&year=2026\")",
+      "Bash(curl -v -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/x-www-form-urlencoded\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" -d \"leagueId=1&year=2026&month=3\")",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" -d '{\"\"\"\"leagueId\"\"\"\":\"\"\"\"1\"\"\"\",\"\"\"\"year\"\"\"\":\"\"\"\"2026\"\"\"\",\"\"\"\"month\"\"\"\":\"\"\"\"3\"\"\"\"}')",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getClubListByYear.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" -d '{\"\"\"\"leagueId\"\"\"\":\"\"\"\"1\"\"\"\",\"\"\"\"year\"\"\"\":\"\"\"\"2026\"\"\"\"}')",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com/schedule.do?leagueId=1\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\" -d '{\"\"\"\"leagueId\"\"\"\":1,\"\"\"\"year\"\"\"\":2026,\"\"\"\"month\"\"\"\":3,\"\"\"\"teamId\"\"\"\":\"\"\"\"\"\"\"\",\"\"\"\"ticketYn\"\"\"\":\"\"\"\"N\"\"\"\",\"\"\"\"etcYn\"\"\"\":\"\"\"\"N\"\"\"\"}')",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com/schedule.do?leagueId=1\" -H \"User-Agent: Mozilla/5.0\" -d '{\"\"\"\"leagueId\"\"\"\":1,\"\"\"\"year\"\"\"\":2026,\"\"\"\"month\"\"\"\":3,\"\"\"\"teamId\"\"\"\":\"\"\"\"\"\"\"\",\"\"\"\"ticketYn\"\"\"\":\"\"\"\"N\"\"\"\",\"\"\"\"etcYn\"\"\"\":\"\"\"\"N\"\"\"\"}')",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0\" -d '{\"\"\"\"leagueId\"\"\"\":1,\"\"\"\"year\"\"\"\":2025,\"\"\"\"month\"\"\"\":5,\"\"\"\"teamId\"\"\"\":\"\"\"\"\"\"\"\",\"\"\"\"ticketYn\"\"\"\":\"\"\"\"N\"\"\"\",\"\"\"\"etcYn\"\"\"\":\"\"\"\"N\"\"\"\"}')",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getScheduleList.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0\" -d '{\"\"\"\"leagueId\"\"\"\":1,\"\"\"\"year\"\"\"\":2026,\"\"\"\"month\"\"\"\":10,\"\"\"\"teamId\"\"\"\":\"\"\"\"\"\"\"\",\"\"\"\"ticketYn\"\"\"\":\"\"\"\"N\"\"\"\",\"\"\"\"etcYn\"\"\"\":\"\"\"\"N\"\"\"\"}')",
+      "Bash(curl -s \"https://www.kleague.com\")",
+      "Bash(curl -s --compressed \"https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36\")",
+      "Bash(curl -s --compressed \"https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s --compressed -L \"https://www.kleague.com/club/clubIntro.do?clubId=K21\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s -X POST \"https://www.kleague.com/api/clubIntro.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0\" -d '{\"\"\"\"teamId\"\"\"\":\"\"\"\"K21\"\"\"\",\"\"\"\"year\"\"\"\":2026}')",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, ensure_ascii=False, indent=2\\)\\)\")",
+      "Bash(curl -s -X POST \"https://www.kleague.com/getClubInfo.do\" -H \"Content-Type: application/json\" -H \"Referer: https://www.kleague.com\" -H \"User-Agent: Mozilla/5.0\" -d '{\"\"\"\"teamId\"\"\"\":\"\"\"\"K21\"\"\"\",\"\"\"\"year\"\"\"\":2026}')",
+      "Bash(curl -s --compressed \"https://www.kleague.com/assets/js/common.js\" -H \"User-Agent: Mozilla/5.0\")",
+      "Bash(curl -s --compressed \"https://www.kleague.com/assets/js/script.js\" -H \"User-Agent: Mozilla/5.0\")"
     ]
   }
 }

@@ -51,8 +51,9 @@ public class MatchService {
   private LocalDateTime[] toUtcRange(LocalDate kstDate) {
     ZonedDateTime startKst = kstDate.atStartOfDay(KST);
     LocalDateTime startUtc = startKst.withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
-    LocalDateTime endUtc = startKst.plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
-    return new LocalDateTime[]{startUtc, endUtc};
+    LocalDateTime endUtc =
+        startKst.plusDays(1).withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+    return new LocalDateTime[] {startUtc, endUtc};
   }
 
   public List<MatchResponse> findLive(Long sportId) {
