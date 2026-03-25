@@ -13,13 +13,27 @@ public class RiotCollectorScheduler {
 
   private final RiotCollector riotCollector;
 
-  // 매일 새벽 1시 (UTC) = 오전 10시 (KST)
-  // LCK/LPL 전날 경기 결과 + 당일 및 7일치 예정 경기 수집
+  // 매 5분 — 오늘 경기 결과/상태 업데이트 (LCK/LPL은 저녁 경기)
+  @Scheduled(cron = "0 */5 * * * *")
+  public void liveSync() {
+    LocalDate today = LocalDate.now();
+    riotCollector.syncAll(today, today);
+  }
+
+  // 매일 새벽 1시 (UTC) = 오전 10시 (KST) — 어제 결과 보정 + 앞으로 30일 일정
   @Scheduled(cron = "0 0 1 * * *")
-  public void scheduledSync() {
-    log.info("Riot 스케줄러 실행");
-    LocalDate yesterday = LocalDate.now().minusDays(1);
-    LocalDate nextWeek = LocalDate.now().plusDays(7);
-    riotCollector.syncAll(yesterday, nextWeek);
+  public void dailySync() {
+    LocalDate today = LocalDate.now();
+    log.info("Riot 일간 스케줄러 실행: {}", today);
+    riotCollector.syncAll(today.minusDays(1), today.plusDays(30));
+  }
+
+  // 매주 일요일 새벽 2시 (UTC) — 연말까지 전체 일정 등록 (새 스플릿 일정 포함)
+  @Scheduled(cron = "0 0 2 * * SUN")
+  public void weeklyFullSync() {
+    LocalDate today = LocalDate.now();
+    LocalDate endOfYear = today.withDayOfYear(today.lengthOfYear());
+    log.info("Riot 주간 전체 스케줄러 실행: {} ~ {}", today, endOfYear);
+    riotCollector.syncAll(today, endOfYear);
   }
 }

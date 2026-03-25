@@ -58,8 +58,7 @@ public class RiotCollector {
         League league = leagueRepository.findByCode(config.leagueCode()).orElseThrow();
         syncLeagueSchedule(config, sport, league, from, to);
       } catch (Exception e) {
-        log.error(
-            "Riot 리그 동기화 실패: leagueCode={}, error={}", config.leagueCode(), e.getMessage());
+        log.error("Riot 리그 동기화 실패: leagueCode={}, error={}", config.leagueCode(), e.getMessage());
       }
     }
 
@@ -91,7 +90,10 @@ public class RiotCollector {
       if (firstEventTime.isAfter(toDt)) break; // 범위 초과, 중단
 
       processPage(response, fromDt, toDt, sport, league, config.sportCode());
-      newerToken = response.data().schedule().pages() != null ? response.data().schedule().pages().newer() : null;
+      newerToken =
+          response.data().schedule().pages() != null
+              ? response.data().schedule().pages().newer()
+              : null;
     }
 
     // older 방향 (과거) 탐색
@@ -105,7 +107,10 @@ public class RiotCollector {
       if (lastEventTime.isBefore(fromDt)) break; // 범위 이전, 중단
 
       processPage(response, fromDt, toDt, sport, league, config.sportCode());
-      olderToken = response.data().schedule().pages() != null ? response.data().schedule().pages().older() : null;
+      olderToken =
+          response.data().schedule().pages() != null
+              ? response.data().schedule().pages().older()
+              : null;
     }
   }
 
