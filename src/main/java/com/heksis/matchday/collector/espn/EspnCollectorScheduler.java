@@ -1,6 +1,7 @@
 package com.heksis.matchday.collector.espn;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +17,7 @@ public class EspnCollectorScheduler {
   // 매 5분 — 오늘 경기 결과/상태 업데이트 (LIVE, FINISHED)
   @Scheduled(cron = "0 */5 * * * *")
   public void liveSync() {
-    LocalDate today = LocalDate.now();
+    LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
     espnCollector.syncAll(today, today);
   }
 

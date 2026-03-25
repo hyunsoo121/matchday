@@ -3,14 +3,15 @@ package com.heksis.matchday.match.dto;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.heksis.matchday.match.Match;
 import com.heksis.matchday.match.MatchStatus;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.List;
 
 public record MatchResponse(
     Long id,
     Long sportId,
     Long leagueId,
-    LocalDateTime matchTime,
+    Instant matchTime,
     MatchStatus status,
     @JsonRawValue String scoreDetail,
     String externalUrl,
@@ -21,7 +22,7 @@ public record MatchResponse(
         match.getId(),
         match.getSport().getId(),
         match.getLeague() != null ? match.getLeague().getId() : null,
-        match.getMatchTime(),
+        match.getMatchTime().toInstant(ZoneOffset.UTC),
         match.getStatus(),
         match.getScoreDetail(),
         match.getExternalUrl(),
